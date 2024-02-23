@@ -3,6 +3,7 @@ from typing import Tuple
 
 # THIRD PARTY
 import psutil
+from flask import current_app
 
 
 def get_cpu_temperature() -> str:
@@ -10,9 +11,11 @@ def get_cpu_temperature() -> str:
     temps = psutil.sensors_temperatures()
     cores = temps.get("coretemp", [])
     core_temps = [core[1] for core in cores]
-    if len(core_temps):
+    try:
         return f"{sum(core_temps) / len(core_temps):.2f}"
-    return "0.00"
+    except ZeroDivisionError as exc:
+        current_app.logger.warning(f"Couldn't calculate average CPU temperate: {exc}")
+        return "0.00"
 
 
 def get_cpu_utilization() -> str:
@@ -22,17 +25,17 @@ def get_cpu_utilization() -> str:
 
 def get_memory_utilization() -> Tuple[str, str, str]:
     """Get current system memory usage statistics."""
-    memory_utilization = psutil.virtual_memory()
-    percentage = memory_utilization.percent
-    used = memory_utilization.used / (1024 * 1024)
-    total = memory_utilization.total / (1024 * 1024)
-    return f"{percentage:.2f}", f"{int(used)}", f"{int(total)}"
+    utilization = psutil.virtual_memory()
+    percentage = f"{utilization.percent:.2f}"
+    used = f"{int(utilization.used / (1024 * 1024))}"
+    total = f"{int(utilization.total / (1024 * 1024))}"
+    return percentage, used, total
 
 
 def get_storage_utilization() -> Tuple[str, str, str]:
     """Get current storage usage statistics."""
-    memory_utilization = psutil.disk_usage(path="/")
-    percentage = memory_utilization.percent
-    used = memory_utilization.used / (1024 * 1024 * 1024)
-    total = memory_utilization.total / (1024 * 1024 * 1024)
-    return f"{percentage:.2f}", f"{used:.2f}", f"{total:.2f}"
+    utilization = psutil.disk_usage(path="/")
+    percentage = f"{utilization.percent:.2f}"
+    used = f"{int(utilization.used / (1024 * 1024 * 1024))}"
+    total = f"{int(utilization.total / (1024 * 1024 * 1024))}"
+    return percentage, used, total
