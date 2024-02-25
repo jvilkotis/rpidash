@@ -4,6 +4,7 @@ from typing import Tuple, Union
 
 # THIRD PARTY
 import psutil
+import yaml
 
 
 def get_cpu_temperature() -> Union[str, None]:
@@ -42,3 +43,10 @@ def get_storage_utilization() -> Tuple[str, str, str]:
     used = f"{int(utilization.used / (1024 * 1024 * 1024))}"
     total = f"{int(utilization.total / (1024 * 1024 * 1024))}"
     return percentage, used, total
+
+
+def load_app_config() -> dict:
+    """Load app configuration from YAML file."""
+    with open("rpidash/config.yaml", encoding="utf-8") as f:
+        config = yaml.safe_load(f)
+    return config

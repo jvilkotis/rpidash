@@ -4,7 +4,6 @@ import inspect
 import logging
 
 # THIRD PARTY
-import yaml
 from flask_apscheduler import APScheduler
 
 # FIRST PARTY
@@ -15,14 +14,14 @@ from rpidash.utils import (
     get_cpu_percentage,
     get_cpu_temperature,
     get_memory_utilization,
+    load_app_config,
 )
 
 logging.getLogger("apscheduler").setLevel(logging.WARNING)
 
 scheduler = APScheduler()
 
-with open("rpidash/config.yaml", encoding="utf-8") as f:
-    config = yaml.safe_load(f)
+config = load_app_config()
 
 
 @scheduler.task(

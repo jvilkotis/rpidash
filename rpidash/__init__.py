@@ -2,13 +2,13 @@
 import logging
 
 # THIRD PARTY
-import yaml
 from flask import Flask
 
 # FIRST PARTY
 from rpidash import database as db
 from rpidash import models
 from rpidash.scheduled_tasks import scheduler
+from rpidash.utils import load_app_config
 from rpidash.views.api_views import CurrentUtilization, UtilizationHistory
 from rpidash.views.dash import Dash
 
@@ -21,7 +21,9 @@ def create_app() -> Flask:
     )
 
     app = Flask(__name__)
-    app.config.from_file("config.yaml", load=yaml.safe_load)
+
+    config = load_app_config()
+    app.config.update(config)
 
     # Template views
     app.add_url_rule("/", view_func=Dash.as_view("dash"))
