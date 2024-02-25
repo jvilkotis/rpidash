@@ -12,6 +12,7 @@ build-backend = "flit_core.buildapi"
 [tool.pylint."MESSAGES CONTROL"]
 disable = "missing-module-docstring"
 max-line-length = 79
+check-quote-consistency = true
 
 [tool.isort]
 import_heading_future = "FUTURE"

@@ -1,8 +1,8 @@
 # STDLIB
 import logging
 
-import yaml
 # THIRD PARTY
+import yaml
 from flask import Flask
 
 # FIRST PARTY

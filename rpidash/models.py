@@ -10,7 +10,7 @@ from rpidash.database import Base
 
 class CPUTemperature(Base):  # pylint: disable=too-few-public-methods
     """CPU temperature model."""
-    __tablename__ = 'cpu_temperature'
+    __tablename__ = "cpu_temperature"
     id = Column(Integer, primary_key=True)
     temperature = Column(String(50))
     date = Column(DateTime())
@@ -22,7 +22,7 @@ class CPUTemperature(Base):  # pylint: disable=too-few-public-methods
 
 class CPUUtilization(Base):  # pylint: disable=too-few-public-methods
     """CPU utilization model."""
-    __tablename__ = 'cpu_utilization'
+    __tablename__ = "cpu_utilization"
     id = Column(Integer, primary_key=True)
     percentage = Column(String(50))
     date = Column(DateTime())
@@ -34,7 +34,7 @@ class CPUUtilization(Base):  # pylint: disable=too-few-public-methods
 
 class MemoryUtilization(Base):  # pylint: disable=too-few-public-methods
     """Memory utilization model."""
-    __tablename__ = 'memory_utilization'
+    __tablename__ = "memory_utilization"
     id = Column(Integer, primary_key=True)
     percentage = Column(String(50))
     date = Column(DateTime())

@@ -7,8 +7,8 @@ import logging
 import yaml
 from flask_apscheduler import APScheduler
 
-from rpidash import models
 # FIRST PARTY
+from rpidash import models
 from rpidash.database import db_session
 from rpidash.models import CPUTemperature, CPUUtilization, MemoryUtilization
 from rpidash.utils import (
@@ -75,7 +75,7 @@ def record_memory_utilization():
     seconds=config["RECORD_DELETE_INTERVAL"],
 )
 def delete_old_records():
-    """Delete records older than configured date."""
+    """Delete records older than the configured date."""
     for _, model in inspect.getmembers(models):
         if inspect.isclass(model) and model.__module__ == models.__name__:
             cutoff_date = datetime.datetime.now() - datetime.timedelta(
