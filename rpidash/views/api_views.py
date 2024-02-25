@@ -61,10 +61,10 @@ class UtilizationHistory(UtilizationBase):
     @staticmethod
     def get_model(**kwargs) -> UtilizationModel:
         """Get model by table name path parameter."""
-        for _, obj in inspect.getmembers(models):
-            if inspect.isclass(obj) and obj.__module__ == models.__name__:
-                if getattr(obj, "__tablename__") == kwargs["table_name"]:
-                    return obj
+        for _, model in inspect.getmembers(models):
+            if inspect.isclass(model) and model.__module__ == models.__name__:
+                if model.__tablename__ == kwargs["table_name"]:
+                    return model
         raise NotImplementedError
 
     @staticmethod

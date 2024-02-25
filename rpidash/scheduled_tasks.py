@@ -1,10 +1,13 @@
 # STDLIB
+import datetime
+import inspect
 import logging
 
 # THIRD PARTY
 import yaml
 from flask_apscheduler import APScheduler
 
+from rpidash import models
 # FIRST PARTY
 from rpidash.database import db_session
 from rpidash.models import CPUTemperature, CPUUtilization, MemoryUtilization
@@ -13,6 +16,8 @@ from rpidash.utils import (
     get_cpu_temperature,
     get_memory_utilization,
 )
+
+logging.getLogger("apscheduler").setLevel(logging.WARNING)
 
 scheduler = APScheduler()
 
@@ -62,3 +67,27 @@ def record_memory_utilization():
     memory_utilization = MemoryUtilization(percentage=reading)
     db_session.add(memory_utilization)
     db_session.commit()
+
+
+@scheduler.task(
+    "interval",
+    id="delete_old_records",
+    seconds=config["RECORD_DELETE_INTERVAL"],
+)
+def delete_old_records():
+    """Delete records older than configured date."""
+    for _, model in inspect.getmembers(models):
+        if inspect.isclass(model) and model.__module__ == models.__name__:
+            cutoff_date = datetime.datetime.now() - datetime.timedelta(
+                seconds=config["DELETE_RECORDS_OLDER_THAN"]
+            )
+            records_to_delete = model.query.filter(
+                model.date < cutoff_date
+            ).delete()
+            logging.info(
+                "Deleting %s records from %s table older than %s",
+                records_to_delete,
+                model.__tablename__,
+                cutoff_date,
+            )
+            db_session.commit()
