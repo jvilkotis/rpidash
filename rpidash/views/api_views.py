@@ -10,8 +10,8 @@ from sqlalchemy.orm import DeclarativeMeta
 # FIRST PARTY
 from rpidash import models
 from rpidash.utils import (
+    get_cpu_percentage,
     get_cpu_temperature,
-    get_cpu_utilization,
     get_memory_utilization,
     get_storage_utilization,
 )
@@ -38,10 +38,13 @@ class CurrentUtilization(UtilizationBase):
     def prepare_response(self, **kwargs) -> dict:
         """Prepare current system utilization JSON response."""
         memory_percentage, memory_used, memory_total = get_memory_utilization()
-        storage_percentage, storage_used, storage_total = get_storage_utilization()
+        storage_percentage, storage_used, storage_total = \
+            get_storage_utilization()
+        cpu_percentage = get_cpu_percentage()
+        cpu_temperature = get_cpu_temperature()
         response = {
-            "cpu_temperature": get_cpu_temperature(),
-            "cpu_percentage": get_cpu_utilization(),
+            "cpu_temperature": cpu_temperature if cpu_temperature else "0.00",
+            "cpu_percentage": cpu_percentage if cpu_percentage else "0.00",
             "memory_percentage": memory_percentage,
             "memory_used": memory_used,
             "memory_total": memory_total,

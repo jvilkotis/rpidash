@@ -1,12 +1,12 @@
 # STDLIB
-from typing import Tuple
+import logging
+from typing import Tuple, Union
 
 # THIRD PARTY
 import psutil
-from flask import current_app
 
 
-def get_cpu_temperature() -> str:
+def get_cpu_temperature() -> Union[str, None]:
     """Get current average temperature between CPU cores."""
     temps = psutil.sensors_temperatures()
     cores = temps.get("coretemp", [])
@@ -14,13 +14,16 @@ def get_cpu_temperature() -> str:
     try:
         return f"{sum(core_temps) / len(core_temps):.2f}"
     except ZeroDivisionError as exc:
-        current_app.logger.warning(f"Couldn't calculate average CPU temperate: {exc}")
-        return "0.00"
+        logging.warning("Couldn't calculate average CPU temperate: %s", exc)
+        return None
 
 
-def get_cpu_utilization() -> str:
+def get_cpu_percentage() -> Union[str, None]:
     """Get current system-wide CPU utilization as a percentage."""
-    return f"{psutil.cpu_percent():.2f}"
+    utilization = psutil.cpu_percent()
+    if utilization > 0:
+        return f"{utilization:.2f}"
+    return None
 
 
 def get_memory_utilization() -> Tuple[str, str, str]:

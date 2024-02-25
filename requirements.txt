@@ -19,3 +19,4 @@ pylint==3.0.3
 SQLAlchemy==2.0.27
 tomlkit==0.12.3
 Werkzeug==3.0.1
+PyYAML~=6.0.1
