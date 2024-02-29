@@ -4,24 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/current-utilization.js') }}"></script>
+    <script src="https://cdn.plot.ly/plotly-2.29.1.min.js" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='js/graph.js') }}"></script>
     <title>rpidash</title>
 </head>
 <body>
 <div class="container">
     <div class="menu">
-        <h1>rpidash</h1>
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Topics</a></li>
-            <li><a href="#">Contact</a></li>
-        </ul>
-    </div>
-    <div class="content">
-        <h2>Current System Utilizationn</h2>
         <div id="currentUtilization"></div>
     </div>
+    <div class="content">
+        <div id="cpuTemperature"></div>
+        <div id="cpuUtilization"></div>
+        <div id="memoryUtilization"></div>
+    </div>
 </div>
-<script src="{{ url_for('static', filename='js/current-utilization.js') }}"></script>
 </body>
 </html>
