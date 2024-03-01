@@ -9,14 +9,27 @@ function fetchCurrentUtilization() {
     });
 }
 function displayCurrentUtilization(data) {
-  const currentUtilizationDiv = document.getElementById("currentUtilization");
-  const htmlContent = `
-    <p>CPU utilization: ${data.cpu_percentage}%</p>
-    <p>CPU temperature: ${data.cpu_temperature} °C</p>
-    <p>Memory utilization: ${data.memory_used} MB (${data.memory_percentage}%) of ${data.memory_total} MB</p>
-    <p>Storage utilization: ${data.storage_used} GB (${data.storage_percentage}%) of ${data.storage_total} GB</p>
-  `;
-  currentUtilizationDiv.innerHTML = htmlContent;
+  const cpuUtilizationElement = document.getElementById("current-cpu-utilization");
+  const cpuTemperatureElement = document.getElementById("current-cpu-temperature");
+  const memoryUtilizationElement = document.getElementById("current-memory-utilization");
+  const storageUtilizationElement = document.getElementById("current-storage-utilization");
+
+  const {
+  cpu_percentage,
+  cpu_temperature,
+  memory_used,
+  memory_percentage,
+  memory_total,
+  storage_used,
+  storage_percentage,
+  storage_total
+  } = data;
+
+  cpuUtilizationElement.innerHTML = `&#8594; ${cpu_percentage}%`;
+  cpuTemperatureElement.innerHTML = `&#8594; ${cpu_temperature} °C`;
+  memoryUtilizationElement.innerHTML = `&#8594; ${memory_used} MB (${memory_percentage}%) of ${memory_total} MB`;
+  storageUtilizationElement.innerHTML = `&#8594; ${storage_used} GB (${storage_percentage}%) of ${storage_total} GB`;
 }
+
 fetchCurrentUtilization();
 setInterval(fetchCurrentUtilization, 10000);

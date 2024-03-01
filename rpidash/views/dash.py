@@ -9,4 +9,4 @@ class Dash(View):
 
     def dispatch_request(self) -> ResponseReturnValue:
         """Render dashboard template view."""
-        return render_template("index.html")
+        return render_template("dashboard.html")

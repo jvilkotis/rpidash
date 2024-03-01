@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/styles.css') }}">
+    <script src="https://cdn.plot.ly/plotly-2.29.1.min.js" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='js/graph.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/current-utilization.js') }}"></script>
+    <title>rpidash</title>
+</head>
+<body>
+<div class="container">
+    <div class="menu">
+        <p>CPU utilization</p>
+        <h3 id="current-cpu-utilization"></h3>
+        <p>CPU temperature</p>
+        <h3 id="current-cpu-temperature"></h3>
+        <p>Memory utilization</p>
+        <h3 id="current-memory-utilization"></h3>
+        <p>Storage utilization</p>
+        <h3 id="current-storage-utilization"></h3>
+        <div class="menu-footer">
+            <p>rpidash v1.0</p>
+        </div>
+    </div>
+    <div class="content">
+        <h3>CPU Temperature (°C)</h3>
+        <div id="cpu-temperature"></div>
+        <h3>CPU Utilization (%)</h3>
+        <div id="cpu-utilization"></div>
+        <h3>Memory Utilization (%)</h3>
+        <div id="memory-utilization"></div>
+    </div>
+</div>
+</body>
+</html>

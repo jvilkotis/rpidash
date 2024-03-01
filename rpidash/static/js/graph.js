@@ -1,4 +1,4 @@
-function fetchDataAndUpdateGraph(endpoint, id, yAxisTitle, graphTitle, valueKey, initializedFlag, index) {
+function fetchDataAndUpdateGraph(endpoint, id, valueKey, initializedFlag, index) {
   fetch(endpoint)
     .then(response => response.json())
     .then(data => {
@@ -8,15 +8,20 @@ function fetchDataAndUpdateGraph(endpoint, id, yAxisTitle, graphTitle, valueKey,
         x: dates,
         y: values,
         mode: "lines",
-        type: "scatter"
+        type: "scatter",
+        line: {color: "#B80C09"}
       }];
       const layout = {
-        xaxis: {},
-        yaxis: { title: yAxisTitle },
-        title: graphTitle
+        xaxis: {zeroline: false},
+        yaxis: {zeroline: false},
+        dragmode: "pan"
+      };
+      const config = {
+        scrollZoom: true,
+        displayModeBar: false
       };
       if (!initializedFlag) {
-        Plotly.newPlot(id, chartData, layout, { displaylogo: false });
+        Plotly.newPlot(id, chartData, layout, config);
         graphs[index].initializedFlag = true;
       } else {
         const updatedData = {
@@ -34,25 +39,19 @@ function fetchDataAndUpdateGraph(endpoint, id, yAxisTitle, graphTitle, valueKey,
 const graphs = [
   {
     endpoint: "/services/cpu_utilization",
-    id: "cpuUtilization",
-    yAxisTitle: "Utilization (%)",
-    graphTitle: "CPU Utilization",
+    id: "cpu-utilization",
     valueKey: "percentage",
     initializedFlag: false
   },
   {
     endpoint: "/services/cpu_temperature",
-    id: "cpuTemperature",
-    yAxisTitle: "Temperature (°C)",
-    graphTitle: "CPU Temperature",
+    id: "cpu-temperature",
     valueKey: "temperature",
     initializedFlag: false
   },
   {
     endpoint: "/services/memory_utilization",
-    id: "memoryUtilization",
-    yAxisTitle: "Utilization (%)",
-    graphTitle: "Memory Utilization",
+    id: "memory-utilization",
     valueKey: "percentage",
     initializedFlag: false
   }
@@ -62,8 +61,6 @@ graphs.forEach((graph, index) => {
   fetchDataAndUpdateGraph(
     graph.endpoint,
     graph.id,
-    graph.yAxisTitle,
-    graph.graphTitle,
     graph.valueKey,
     graph.initializedFlag,
     index
@@ -73,8 +70,6 @@ graphs.forEach((graph, index) => {
     fetchDataAndUpdateGraph(
       graph.endpoint,
       graph.id,
-      graph.yAxisTitle,
-      graph.graphTitle,
       graph.valueKey,
       graph.initializedFlag,
       index
