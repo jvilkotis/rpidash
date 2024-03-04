@@ -5,6 +5,7 @@ from typing import Tuple, Union
 # THIRD PARTY
 import psutil
 import yaml
+import toml
 
 
 def get_cpu_temperature() -> Union[str, None]:
@@ -47,6 +48,14 @@ def get_storage_utilization() -> Tuple[str, str, str]:
 
 def load_app_config() -> dict:
     """Load app configuration from YAML file."""
-    with open("rpidash/config.yaml", encoding="utf-8") as f:
-        config = yaml.safe_load(f)
+    with open("rpidash/config.yaml", "r", encoding="utf-8") as file:
+        config = yaml.safe_load(file)
     return config
+
+
+def get_project_version() -> dict:
+    """Get project version from pyproject.toml."""
+    with open("pyproject.toml", "r", encoding="utf-8") as file:
+        config = toml.load(file)
+    version = config["project"]["version"]
+    return version

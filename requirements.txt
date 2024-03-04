@@ -20,3 +20,4 @@ SQLAlchemy==2.0.27
 tomlkit==0.12.3
 Werkzeug==3.0.1
 PyYAML~=6.0.1
+toml~=0.10.2
