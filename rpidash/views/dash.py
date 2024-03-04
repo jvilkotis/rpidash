@@ -3,6 +3,7 @@ from flask import render_template
 from flask.typing import ResponseReturnValue
 from flask.views import View
 
+# FIRST PARTY
 from rpidash.utils import get_project_version
 
 
@@ -14,6 +15,7 @@ class Dash(View):
         self.setup_context()
 
     def setup_context(self):
+        """Setup template context."""
         self.context["version"] = get_project_version()
 
     def dispatch_request(self) -> ResponseReturnValue:

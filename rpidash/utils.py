@@ -4,8 +4,8 @@ from typing import Tuple, Union
 
 # THIRD PARTY
 import psutil
-import yaml
 import toml
+import yaml
 
 
 def get_cpu_temperature() -> Union[str, None]:
