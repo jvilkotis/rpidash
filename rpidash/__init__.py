@@ -10,7 +10,7 @@ from rpidash import models
 from rpidash.scheduled_tasks import scheduler
 from rpidash.utils import load_app_config
 from rpidash.views.api_views import CurrentUtilization, UtilizationHistory
-from rpidash.views.dash import Dash
+from rpidash.views.dashboard import Dashboard
 
 
 def create_app() -> Flask:
@@ -26,7 +26,7 @@ def create_app() -> Flask:
     app.config.update(config)
 
     # Template views
-    app.add_url_rule("/", view_func=Dash.as_view("dash"))
+    app.add_url_rule("/", view_func=Dashboard.as_view("dash"))
 
     # API views
     app.add_url_rule(

@@ -7,7 +7,7 @@ from flask.views import View
 from rpidash.utils import get_project_version
 
 
-class Dash(View):
+class Dashboard(View):
     """Dashboard view."""
 
     def __init__(self):
