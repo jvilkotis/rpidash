@@ -9,11 +9,6 @@ function fetchCurrentUtilization() {
     });
 }
 function displayCurrentUtilization(data) {
-  const cpuUtilizationElement = document.getElementById("current-cpu-utilization");
-  const cpuTemperatureElement = document.getElementById("current-cpu-temperature");
-  const memoryUtilizationElement = document.getElementById("current-memory-utilization");
-  const storageUtilizationElement = document.getElementById("current-storage-utilization");
-
   const {
   cpu_percentage,
   cpu_temperature,
@@ -25,10 +20,25 @@ function displayCurrentUtilization(data) {
   storage_total
   } = data;
 
-  cpuUtilizationElement.innerHTML = `&#8594; ${cpu_percentage}%`;
-  cpuTemperatureElement.innerHTML = `&#8594; ${cpu_temperature} °C`;
-  memoryUtilizationElement.innerHTML = `&#8594; ${memory_used} MB (${memory_percentage}%) of ${memory_total} MB`;
-  storageUtilizationElement.innerHTML = `&#8594; ${storage_used} GB (${storage_percentage}%) of ${storage_total} GB`;
+  const cpuUtilizationElement = document.getElementById("current-cpu-utilization");
+  const cpuTemperatureElement = document.getElementById("current-cpu-temperature");
+  const memoryUtilizationElement = document.getElementById("current-memory-utilization");
+  const storageUtilizationElement = document.getElementById("current-storage-utilization");
+
+  cpuUtilizationElement.innerHTML = `${cpu_percentage}%`;
+  cpuTemperatureElement.innerHTML = `${cpu_temperature} °C`;
+  memoryUtilizationElement.innerHTML = `${memory_used} MB (${memory_percentage}%) of ${memory_total} MB`;
+  storageUtilizationElement.innerHTML = `${storage_used} GB (${storage_percentage}%) of ${storage_total} GB`;
+
+  const cpuUtilizationProgress = document.getElementById("cpu-utilization-progress");
+  const cpuTemperatureProgress = document.getElementById("cpu-temperature-progress");
+  const memoryUtilizationProgress = document.getElementById("memory-utilization-progress");
+  const storageUtilizationProgress = document.getElementById("storage-utilization-progress");
+
+  cpuUtilizationProgress.style.width = 100 - cpu_percentage + "%";
+  cpuTemperatureProgress.style.width = 100 - cpu_temperature + "%";
+  memoryUtilizationProgress.style.width = 100 - memory_percentage + "%";
+  storageUtilizationProgress.style.width = 100 - storage_percentage + "%";
 }
 
 fetchCurrentUtilization();

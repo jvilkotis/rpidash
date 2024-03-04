@@ -3,23 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
     <script src="https://cdn.plot.ly/plotly-2.29.1.min.js" charset="utf-8"></script>
     <script src="{{ url_for('static', filename='js/graph.js') }}"></script>
     <script src="{{ url_for('static', filename='js/current-utilization.js') }}"></script>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
     <title>rpidash</title>
 </head>
 <body>
 <div class="container">
     <div class="menu">
-        <p>CPU utilization</p>
-        <h3 id="current-cpu-utilization"></h3>
-        <p>CPU temperature</p>
-        <h3 id="current-cpu-temperature"></h3>
-        <p>Memory utilization</p>
-        <h3 id="current-memory-utilization"></h3>
-        <p>Storage utilization</p>
-        <h3 id="current-storage-utilization"></h3>
+        <div class="utilization-element">
+            <p>CPU utilization</p>
+            <div class="icon-container">
+                <span class="material-symbols-outlined">computer</span>
+            </div>
+            <h3 id="current-cpu-utilization"></h3>
+            <div class="progress-bar">
+                <div id="cpu-utilization-progress" class="progress"></div>
+            </div>
+        </div>
+        <div class="utilization-element">
+            <p>CPU temperature</p>
+            <div class="icon-container">
+                <span class="material-symbols-outlined">heat</span>
+            </div>
+            <h3 id="current-cpu-temperature"></h3>
+            <div class="progress-bar">
+                <div id="cpu-temperature-progress" class="progress"></div>
+            </div>
+        </div>
+        <div class="utilization-element">
+            <p>Memory utilization</p>
+            <div class="icon-container">
+                <span class="material-symbols-outlined">memory</span>
+            </div>
+            <h3 id="current-memory-utilization">6200 MB (41.60%) of 15846 MB</h3>
+            <div class="progress-bar">
+                <div id="memory-utilization-progress" class="progress"></div>
+            </div>
+        </div>
+        <div class="utilization-element">
+            <p>Storage utilization</p>
+            <div class="icon-container">
+                <span class="material-symbols-outlined">storage</span>
+            </div>
+            <h3 id="current-storage-utilization"></h3>
+            <div class="progress-bar">
+                <div id="storage-utilization-progress" class="progress"></div>
+            </div>
+        </div>
         <div class="menu-footer">
             <p>rpidash v1.0</p>
         </div>

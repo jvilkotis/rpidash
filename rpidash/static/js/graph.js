@@ -14,7 +14,8 @@ function fetchDataAndUpdateGraph(endpoint, id, valueKey, initializedFlag, index)
       const layout = {
         xaxis: {zeroline: false},
         yaxis: {zeroline: false},
-        dragmode: "pan"
+        dragmode: "pan",
+        margin: {t: 20}
       };
       const config = {
         scrollZoom: true,
