@@ -1,5 +1,6 @@
 # STDLIB
 import logging
+from typing import Optional
 
 # THIRD PARTY
 from flask import Flask
@@ -13,17 +14,17 @@ from rpidash.views.api_views import CurrentUtilization, UtilizationHistory
 from rpidash.views.dashboard import Dashboard
 
 
-def create_app() -> Flask:
+def create_app(testing: Optional[bool] = False) -> Flask:
     """Create and configure the app."""
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(levelname)s - %(message)s",
-    )
-
     app = Flask(__name__)
 
-    config = load_app_config()
+    config = load_app_config(testing=testing)
     app.config.update(config)
+
+    logging.basicConfig(
+        level=app.config["LOGGING_LEVEL"],
+        format="%(asctime)s - %(levelname)s - %(message)s",
+    )
 
     # Template views
     app.add_url_rule("/", view_func=Dashboard.as_view("dash"))
@@ -38,11 +39,11 @@ def create_app() -> Flask:
         view_func=UtilizationHistory.as_view("utilization_history"),
     )
 
-    if app.config["SCHEDULED_TASKS"]:
+    if app.config["SCHEDULED_TASKS"]:  # pragma: no cover
         scheduler.init_app(app)
         scheduler.start()
 
-    db.init_db()
+    db.init_db(database_uri=app.config["DATABASE_URI"])
 
     @app.teardown_appcontext
     def shutdown_session(exception=None):  # pylint: disable=unused-argument

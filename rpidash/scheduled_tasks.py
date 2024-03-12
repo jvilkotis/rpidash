@@ -1,7 +1,7 @@
 # STDLIB
-import datetime
 import inspect
 import logging
+from datetime import datetime, timedelta
 
 # THIRD PARTY
 from flask_apscheduler import APScheduler
@@ -77,7 +77,7 @@ def delete_old_records():
     """Delete records older than the configured date."""
     for _, model in inspect.getmembers(models):
         if inspect.isclass(model) and model.__module__ == models.__name__:
-            cutoff_date = datetime.datetime.now() - datetime.timedelta(
+            cutoff_date = datetime.now() - timedelta(
                 seconds=config["DELETE_RECORDS_OLDER_THAN"]
             )
             records_to_delete = model.query.filter(

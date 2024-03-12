@@ -1,6 +1,7 @@
 # STDLIB
 import logging
-from typing import Tuple, Union
+import os
+from typing import Optional, Tuple, Union
 
 # THIRD PARTY
 import psutil
@@ -46,16 +47,21 @@ def get_storage_utilization() -> Tuple[str, str, str]:
     return percentage, used, total
 
 
-def load_app_config() -> dict:
+def load_app_config(testing: Optional[bool] = False) -> dict:
     """Load app configuration from YAML file."""
-    with open("rpidash/config.yaml", "r", encoding="utf-8") as file:
+    file_name = "test_config.yaml" if testing else "config.yaml"
+    dir_path = os.path.dirname(os.path.abspath(__file__))
+    config_path = os.path.join(dir_path, file_name)
+    with open(config_path, "r", encoding="utf-8") as file:
         config = yaml.safe_load(file)
     return config
 
 
-def get_project_version() -> dict:
+def get_project_version() -> str:
     """Get project version from pyproject.toml."""
-    with open("pyproject.toml", "r", encoding="utf-8") as file:
-        config = toml.load(file)
-    version = config["project"]["version"]
+    dir_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    pyproject_path = os.path.join(dir_path, "pyproject.toml")
+    with open(pyproject_path, "r", encoding="utf-8") as file:
+        pyproject = toml.load(file)
+    version = pyproject["project"]["version"]
     return version
