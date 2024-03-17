@@ -47,11 +47,18 @@ def get_storage_utilization() -> Tuple[str, str, str]:
     return percentage, used, total
 
 
-def load_app_config(testing: Optional[bool] = False) -> dict:
+def load_app_config() -> dict:
     """Load app configuration from YAML file."""
-    file_name = "test_config.yaml" if testing else "config.yaml"
+    environment = os.environ["FLASK_ENV"]
     dir_path = os.path.dirname(os.path.abspath(__file__))
-    config_path = os.path.join(dir_path, file_name)
+    if environment == "production":
+        config_path = "/path/in/container/config/config.yaml"  # TODO: add config url
+    elif environment == "development":
+        config_path = os.path.join(dir_path, "config.dev.yaml")
+    elif environment == "testing":
+        config_path = os.path.join(dir_path, "config.test.yaml")
+    else:
+        raise ValueError(f"Invalid environment provided: {environment}")
     with open(config_path, "r", encoding="utf-8") as file:
         config = yaml.safe_load(file)
     return config

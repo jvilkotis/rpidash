@@ -14,11 +14,11 @@ from rpidash.views.api_views import CurrentUtilization, UtilizationHistory
 from rpidash.views.dashboard import Dashboard
 
 
-def create_app(testing: Optional[bool] = False) -> Flask:
+def create_app() -> Flask:
     """Create and configure the app."""
     app = Flask(__name__)
 
-    config = load_app_config(testing=testing)
+    config = load_app_config()
     app.config.update(config)
 
     logging.basicConfig(

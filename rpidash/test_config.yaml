@@ -1,8 +1,0 @@
-#
-# Test config
-#
-SCHEDULED_TASKS: False
-
-TESTING: True
-LOGGING_LEVEL: ERROR
-DATABASE_URI: "sqlite:///:memory:"

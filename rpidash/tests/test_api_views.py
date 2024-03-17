@@ -1,4 +1,5 @@
 # STDLIB
+import os
 import unittest
 from unittest.mock import MagicMock, patch
 
@@ -17,7 +18,7 @@ class TestUtilizationBase(unittest.TestCase):
     @patch.multiple(UtilizationBase, __abstractmethods__=set())
     def setUp(self):
         """Set up common attributes for tests."""
-        self.app = create_app(testing=True)
+        self.app = create_app()
         self.instance = UtilizationBase()  # pylint: disable=abstract-class-instantiated
 
     @patch("rpidash.views.api_views.UtilizationBase.prepare_response")
