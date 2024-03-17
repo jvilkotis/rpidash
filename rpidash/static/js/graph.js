@@ -20,7 +20,8 @@ const fetchDataAndUpdateGraph = async (graph) => {
       xaxis: { zeroline: false },
       yaxis: { zeroline: false },
       dragmode: "pan",
-      margin: { t: 20 }
+      margin: { t: 20 },
+      font: { family: "'Prompt', sans-serif" }
     };
 
     const config = {
