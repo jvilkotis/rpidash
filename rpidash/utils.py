@@ -1,7 +1,7 @@
 # STDLIB
 import logging
 import os
-from typing import Optional, Tuple, Union
+from typing import Tuple, Union
 
 # THIRD PARTY
 import psutil

@@ -14,7 +14,7 @@ class TestModels(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up the test environment."""
-        cls.app = create_app(testing=True)
+        cls.app = create_app()
         cls.context = cls.app.app_context()
         cls.context.push()
 
