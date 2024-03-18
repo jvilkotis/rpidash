@@ -71,7 +71,7 @@ class TestUtils(unittest.TestCase):
         """Test load_app_config in production environment."""
         load_app_config()
         mock_open_file.assert_called_once_with(
-            "/path/in/container/config/config.yaml",
+            "/data/config.yaml",
             "r",
             encoding="utf-8",
         )

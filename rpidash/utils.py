@@ -52,7 +52,7 @@ def load_app_config() -> dict:
     environment = os.environ["FLASK_ENV"]
     dir_path = os.path.dirname(os.path.abspath(__file__))
     if environment == "production":
-        config_path = "/path/in/container/config/config.yaml"  # TODO: add config url
+        config_path = "/data/config.yaml"
     elif environment == "development":
         config_path = os.path.join(dir_path, "config.dev.yaml")
     elif environment == "testing":
