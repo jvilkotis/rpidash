@@ -22,12 +22,13 @@ logging.getLogger("apscheduler").setLevel(logging.WARNING)
 scheduler = APScheduler()
 
 config = load_app_config()
+intervals = config["scheduled_tasks"]["intervals"]
 
 
 @scheduler.task(
     "interval",
     id="record_cpu_temperature",
-    seconds=config["CPU_TEMPERATURE_RECORD_INTERVAL"],
+    seconds=intervals["cpu_temperature"],
 )
 def record_cpu_temperature():
     """Get CPU temperature and store it in the DB."""
@@ -42,7 +43,7 @@ def record_cpu_temperature():
 @scheduler.task(
     "interval",
     id="record_cpu_percentage",
-    seconds=config["CPU_PERCENTAGE_RECORD_INTERVAL"],
+    seconds=intervals["cpu_percentage"],
 )
 def record_cpu_percentage():
     """Get CPU utilization percentage and store it in the DB."""
@@ -57,7 +58,7 @@ def record_cpu_percentage():
 @scheduler.task(
     "interval",
     id="record_memory_utilization",
-    seconds=config["MEMORY_PERCENTAGE_RECORD_INTERVAL"],
+    seconds=intervals["memory_percentage"],
 )
 def record_memory_utilization():
     """Get memory utilization percentage and store it in the DB."""
@@ -71,14 +72,17 @@ def record_memory_utilization():
 @scheduler.task(
     "interval",
     id="delete_old_records",
-    seconds=config["RECORD_DELETE_INTERVAL"],
+    seconds=intervals["deletion"],
 )
 def delete_old_records():
     """Delete records older than the configured date."""
+    delete_config = config["scheduled_tasks"]["deletion"]
+    if not delete_config["enabled"]:
+        return
     for _, model in inspect.getmembers(models):
         if inspect.isclass(model) and model.__module__ == models.__name__:
             cutoff_date = datetime.now() - timedelta(
-                seconds=config["DELETE_RECORDS_OLDER_THAN"]
+                seconds=delete_config["delete_older_than"]
             )
             records_to_delete = model.query.filter(
                 model.date < cutoff_date

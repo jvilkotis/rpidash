@@ -130,13 +130,7 @@ class TestScheduledTasks(unittest.TestCase):
     @patch("rpidash.scheduled_tasks.inspect", new_callable=MagicMock)
     @patch("rpidash.scheduled_tasks.models")
     @patch("rpidash.scheduled_tasks.db_session")
-    @patch(
-        "rpidash.scheduled_tasks.config",
-        return_value={
-            "RECORD_DELETE_INTERVAL": 60,
-            "DELETE_RECORDS_OLDER_THAN": 3600,
-        },
-    )
+    @patch("rpidash.scheduled_tasks.config")
     def test_delete_old_records(
             self,
             mock_config,
@@ -146,8 +140,15 @@ class TestScheduledTasks(unittest.TestCase):
     ):
         """Test delete_old_records function."""
         config = {
-            "RECORD_DELETE_INTERVAL": 60,
-            "DELETE_RECORDS_OLDER_THAN": 3600,
+            "scheduled_tasks": {
+                "intervals": {
+                    "deletion": 60,
+                },
+                "deletion": {
+                    "enabled": True,
+                    "delete_older_than": 3600,
+                },
+            }
         }
         mock_config.__getitem__.side_effect = config.__getitem__
         mock_model1 = MagicMock()
@@ -177,6 +178,25 @@ class TestScheduledTasks(unittest.TestCase):
         mock_model1.query.filter().delete.assert_called_once()
         mock_model2.query.filter().delete.assert_called_once()
         mock_db_session.commit.assert_called()
+
+    @patch("rpidash.scheduled_tasks.db_session")
+    @patch("rpidash.scheduled_tasks.config")
+    def test_delete_old_records_not_run(
+            self,
+            mock_config,
+            mock_db_session,
+    ):
+        """Test delete_old_records function is not run."""
+        config = {
+            "scheduled_tasks": {
+                "deletion": {
+                    "enabled": False,
+                },
+            }
+        }
+        mock_config.__getitem__.side_effect = config.__getitem__
+        delete_old_records()
+        mock_db_session.commit.assert_not_called()
 
 
 if __name__ == "__main__":  # pragma: no cover

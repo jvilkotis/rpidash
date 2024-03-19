@@ -22,7 +22,7 @@ def create_app() -> Flask:
     app.config.update(config)
 
     logging.basicConfig(
-        level=app.config["LOGGING_LEVEL"],
+        level=config["logging"]["level"],
         format="%(asctime)s - %(levelname)s - %(message)s",
     )
 
@@ -39,11 +39,11 @@ def create_app() -> Flask:
         view_func=UtilizationHistory.as_view("utilization_history"),
     )
 
-    if app.config["SCHEDULED_TASKS"]:  # pragma: no cover
+    if config["scheduled_tasks"]["enabled"]:  # pragma: no cover
         scheduler.init_app(app)
         scheduler.start()
 
-    db.init_db(database_uri=app.config["DATABASE_URI"])
+    db.init_db(database_uri=config["database"]["uri"])
 
     @app.teardown_appcontext
     def shutdown_session(exception=None):  # pylint: disable=unused-argument

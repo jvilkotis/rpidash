@@ -1,10 +1,23 @@
-SCHEDULED_TASKS: False
-CPU_TEMPERATURE_RECORD_INTERVAL: 0
-CPU_PERCENTAGE_RECORD_INTERVAL: 0
-MEMORY_PERCENTAGE_RECORD_INTERVAL: 0
-RECORD_DELETE_INTERVAL: 0
-DELETE_RECORDS_OLDER_THAN: 0
+scheduled_tasks:
+  # Enable/disable automated data recording tasks that run on a schedule
+  enabled: False
+  # Intervals (in seconds) for data recording/deleting tasks
+  intervals:
+    cpu_temperature: 0
+    cpu_percentage: 0
+    memory_percentage: 0
+    deletion: 0
+  # Configuration for record deletion task
+  deletion:
+    # Enable/disable old record deletion
+    enabled: False
+    # Duration (in seconds) specifying records older than which will be deleted
+    delete_older_than: 0
+
+logging:
+  level: ERROR
+
+database:
+  uri: "sqlite:///db.sqlite3"
 
 TESTING: True
-LOGGING_LEVEL: ERROR
-DATABASE_URI: "sqlite:///:memory:"
