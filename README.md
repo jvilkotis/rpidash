@@ -21,6 +21,24 @@ services:
       FLASK_ENV: production
 ```
 
+## Development server
+
+```Shell
+python3 -m venv .venv
+```
+
+```Shell
+. .venv/bin/activate
+```
+
+```Shell
+pip install -r requirements.txt
+```
+
+```Shell
+FLASK_ENV=development flask --app rpidash run --debug
+```
+
 ## Testing
 
 ### Unit tests
