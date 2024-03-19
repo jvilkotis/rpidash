@@ -4,7 +4,7 @@ Flask-based dashboard for headless Raspberry Pi system health monitoring.
 
 ## Installation
 
-docker compose
+### Docker compose
 
 ```YAML
 version: "3.8"
@@ -16,7 +16,9 @@ services:
     volumes:
       - /path/to/data:/data
     environment:
-      - FLASK_ENV=production
+      UID: 1000
+      GID: 1000
+      FLASK_ENV: production
 ```
 
 ## Testing
