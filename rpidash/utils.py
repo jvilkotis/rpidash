@@ -12,7 +12,8 @@ import yaml
 def get_cpu_temperature() -> Union[str, None]:
     """Get current average temperature between CPU cores."""
     temps = psutil.sensors_temperatures()
-    cores = temps.get("coretemp", [])
+    cpu_thermal = temps.get("cpu_thermal", [])
+    cores = temps.get("coretemp", cpu_thermal)
     core_temps = [core[1] for core in cores]
     try:
         return f"{sum(core_temps) / len(core_temps):.2f}"

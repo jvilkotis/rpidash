@@ -21,10 +21,25 @@ class TestUtils(unittest.TestCase):
         "psutil.sensors_temperatures",
         return_value={"coretemp": [(1, 50), (2, 60), (3, 55)]},
     )
-    def test_get_cpu_temperature_valid(self, mock_sensors_temperatures):  # pylint: disable=unused-argument
-        """Test get_cpu_temperature with valid sensors data."""
+    def test_get_cpu_temperature_valid_coretemp(
+            self,
+            mock_sensors_temperatures
+    ):  # pylint: disable=unused-argument
+        """Test get_cpu_temperature with valid coretemp return value."""
         result = get_cpu_temperature()
         self.assertEqual(result, "55.00")
+
+    @patch(
+        "psutil.sensors_temperatures",
+        return_value={"cpu_thermal": [(1, 50), (2, 60), (3, 70)]},
+    )
+    def test_get_cpu_temperature_valid_cpu_thermal(
+            self,
+            mock_sensors_temperatures
+    ):  # pylint: disable=unused-argument
+        """Test get_cpu_temperature with valid cpu_thermal return value."""
+        result = get_cpu_temperature()
+        self.assertEqual(result, "60.00")
 
     @patch("psutil.sensors_temperatures", return_value={})
     def test_get_cpu_temperature_no_cores(self, mock_sensors_temperatures):  # pylint: disable=unused-argument
