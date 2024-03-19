@@ -2,6 +2,8 @@
 
 Flask-based dashboard for headless Raspberry Pi system health monitoring.
 
+![screenshot](rpidash/static/screenshot.png)
+
 ## Installation
 
 ### Docker compose
@@ -20,6 +22,9 @@ services:
       GID: 1000
       FLASK_ENV: production
 ```
+
+The host directory `/path/to/data` is mounted to `/data` in the container, enabling persistent storage for the SQLite
+database and application configuration.
 
 ## Development server
 
