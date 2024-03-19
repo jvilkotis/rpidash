@@ -17,7 +17,11 @@ def get_cpu_temperature() -> Union[str, None]:
     try:
         return f"{sum(core_temps) / len(core_temps):.2f}"
     except ZeroDivisionError as exc:
-        logging.warning("Couldn't calculate average CPU temperate: %s", exc)
+        logging.warning(
+            "Couldn't calculate average CPU temperate: %s, %s",
+            exc,
+            temps,
+        )
         return None
 
 
