@@ -1,5 +1,8 @@
 FROM python:3.12-slim
 
+RUN apt-get update && \
+    apt-get install -y gcc python3-dev
+
 ENV UID=1000
 ENV GID=1000
 
