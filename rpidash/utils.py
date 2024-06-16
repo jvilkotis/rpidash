@@ -11,7 +11,14 @@ import yaml
 
 def get_cpu_temperature() -> Union[str, None]:
     """Get current average temperature between CPU cores."""
-    temps = psutil.sensors_temperatures()
+    try:
+        temps = psutil.sensors_temperatures()
+    except AttributeError as exc:
+        logging.warning(
+            "Couldn't fetch CPU temperate: %s",
+            exc,
+        )
+        return None
     cpu_thermal = temps.get("cpu_thermal", [])
     cores = temps.get("coretemp", cpu_thermal)
     core_temps = [core[1] for core in cores]

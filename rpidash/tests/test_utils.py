@@ -17,33 +17,35 @@ from rpidash.utils import (
 class TestUtils(unittest.TestCase):
     """Unit tests for utility functions."""
 
-    @patch(
-        "psutil.sensors_temperatures",
-        return_value={"coretemp": [(1, 50), (2, 60), (3, 55)]},
-    )
-    def test_get_cpu_temperature_valid_coretemp(
-            self,
-            mock_sensors_temperatures
-    ):  # pylint: disable=unused-argument
+    @patch("rpidash.utils.psutil")
+    def test_get_cpu_temperature_valid_coretemp(self, mock_psutil):
         """Test get_cpu_temperature with valid coretemp return value."""
+        mock_psutil.sensors_temperatures.return_value = {
+            "coretemp": [(1, 50), (2, 60), (3, 55)]
+        }
         result = get_cpu_temperature()
         self.assertEqual(result, "55.00")
 
-    @patch(
-        "psutil.sensors_temperatures",
-        return_value={"cpu_thermal": [(1, 50), (2, 60), (3, 70)]},
-    )
-    def test_get_cpu_temperature_valid_cpu_thermal(
-            self,
-            mock_sensors_temperatures
-    ):  # pylint: disable=unused-argument
+    @patch("rpidash.utils.psutil")
+    def test_get_cpu_temperature_valid_cpu_thermal(self, mock_psutil):
         """Test get_cpu_temperature with valid cpu_thermal return value."""
+        mock_psutil.sensors_temperatures.return_value = {
+            "cpu_thermal": [(1, 50), (2, 60), (3, 70)],
+        }
         result = get_cpu_temperature()
         self.assertEqual(result, "60.00")
 
-    @patch("psutil.sensors_temperatures", return_value={})
-    def test_get_cpu_temperature_no_cores(self, mock_sensors_temperatures):  # pylint: disable=unused-argument
+    @patch("rpidash.utils.psutil")
+    def test_get_cpu_temperature_no_cores(self, mock_psutil):
         """Test get_cpu_temperature with missing sensors data."""
+        mock_psutil.sensors_temperatures.return_value = {}
+        result = get_cpu_temperature()
+        self.assertIsNone(result)
+
+    @patch("rpidash.utils.psutil")
+    def test_get_cpu_temperature_no_attribute(self, mock_psutil):
+        """Test get_cpu_temperature with no sensors_temperatures attribute."""
+        mock_psutil.sensors_temperatures.side_effect = AttributeError
         result = get_cpu_temperature()
         self.assertIsNone(result)
 
