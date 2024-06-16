@@ -1,6 +1,5 @@
 # STDLIB
 import logging
-from typing import Optional
 
 # THIRD PARTY
 from flask import Flask
