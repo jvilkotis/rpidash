@@ -19,9 +19,7 @@ def get_cpu_temperature() -> Union[str, None]:
             exc,
         )
         return None
-    cpu_thermal = temps.get("cpu_thermal", [])
-    cores = temps.get("coretemp", cpu_thermal)
-    core_temps = [core[1] for core in cores]
+    core_temps = extract_core_temps(temps)
     try:
         return f"{sum(core_temps) / len(core_temps):.2f}"
     except ZeroDivisionError as exc:
@@ -31,6 +29,15 @@ def get_cpu_temperature() -> Union[str, None]:
             temps,
         )
         return None
+
+
+def extract_core_temps(temps: dict) -> list:
+    """Extract core temperatures from sensor data."""
+    keys = ["cpu_thermal", "coretemp"]
+    for key in keys:
+        if cores := temps.get(key):
+            return [core[1] for core in cores]
+    return []
 
 
 def get_cpu_percentage() -> Union[str, None]:
