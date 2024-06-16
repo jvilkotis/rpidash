@@ -2,7 +2,7 @@ const fetchDataAndUpdateGraph = async (graph) => {
   try {
     const response = await fetch(graph.endpoint);
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error("Network response was not ok");
     }
     const data = await response.json();
 
@@ -16,8 +16,19 @@ const fetchDataAndUpdateGraph = async (graph) => {
       line: { color: "#B80C09" }
     }];
 
+    const maxDate = new Date(Math.max(...dates));
+    const minDate = new Date(Math.min(...dates));
+
+    const fiveDaysAgo = new Date(maxDate.getTime() - 5 * 24 * 60 * 60 * 1000);
+
+    const rangeStart = new Date(Math.max(fiveDaysAgo, minDate));
+    const rangeEnd = maxDate;
+
     const layout = {
-      xaxis: { zeroline: false },
+      xaxis: {
+        zeroline: false,
+        range: [rangeStart, rangeEnd]
+      },
       yaxis: { zeroline: false },
       dragmode: "pan",
       margin: { t: 20 },
@@ -34,7 +45,7 @@ const fetchDataAndUpdateGraph = async (graph) => {
       graph.initializedFlag = true;
     } else {
       const updatedData = { x: [dates], y: [values] };
-      Plotly.update(graph.id, updatedData);
+      Plotly.update(graph.id, updatedData, layout);
     }
   } catch (error) {
     console.error("There was a problem fetching the data:", error);
