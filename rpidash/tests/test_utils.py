@@ -55,7 +55,7 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(get_cpu_percentage(), "50.00")
 
     @patch("psutil.cpu_percent", return_value=0)
-    def test_get_cpu_percentage_zero_tilization(self, mock_cpu_percent):  # pylint: disable=unused-argument
+    def test_get_cpu_percentage_zero_utilization(self, mock_cpu_percent):  # pylint: disable=unused-argument
         """Test get_cpu_percentage with zero CPU utilization."""
         self.assertIsNone(get_cpu_percentage())
 
