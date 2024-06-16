@@ -9,10 +9,10 @@ Flask-based dashboard for headless Raspberry Pi system health monitoring.
 ### Docker compose
 
 ```YAML
-version: "3.8"
 services:
   rpidash:
-    build: https://github.com/jvilkotis/rpidash.git
+    image: ghcr.io/jvilkotis/rpidash:latest
+    container_name: rpidash
     ports:
       - 5000:5000
     volumes:
@@ -21,10 +21,11 @@ services:
       UID: 1000
       GID: 1000
       FLASK_ENV: production
+    restart: unless-stopped
 ```
 
-The host directory `/path/to/data` is mounted to `/data` in the container, enabling persistent storage for the SQLite
-database and application configuration.
+The host directory `/path/to/data` is mounted as `/data` in the container to
+store the SQLite database and app configuration persistently.
 
 ## Development server
 
