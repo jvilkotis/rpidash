@@ -66,3 +66,13 @@ coverage report
 ```Shell
 coverage html
 ```
+
+### Import Sorting and Linting
+
+```Shell
+isort .
+```
+
+```Shell
+pylint .
+```
