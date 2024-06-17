@@ -72,15 +72,20 @@ class UtilizationHistory(UtilizationBase):
         raise ValueError(f"Model for table '{table_name}' not found.")
 
     @staticmethod
-    def retrieve_data(model: Any) -> List[Dict[str, Any]]:
+    def retrieve_data(model: Any) -> dict[str, list[Any]]:
         """Retrieve data from database."""
         data = model.query.all()
-        processed_data = []
+        values = []
+        dates = []
+        if model.__tablename__ == "cpu_temperature":
+            value_key = "temperature"
+        else:
+            value_key = "percentage"
         for item in data:
             data_dict = item.__dict__
-            del data_dict["_sa_instance_state"]
-            processed_data.append(data_dict)
-        return processed_data
+            values.append(data_dict[value_key])
+            dates.append(data_dict["date"])
+        return {"values": values, "dates": dates}
 
     def get_data(self, table_name: str) -> Any:
         """Get model and retrieve data."""

@@ -6,8 +6,8 @@ const fetchDataAndUpdateGraph = async (graph) => {
     }
     const data = await response.json();
 
-    const dates = data.map(entry => new Date(entry.date));
-    const values = data.map(entry => parseFloat(entry[graph.valueKey]));
+    const dates = data.dates.map(date => new Date(date));
+    const values = data.values;
     const chartData = [{
       x: dates,
       y: values,
