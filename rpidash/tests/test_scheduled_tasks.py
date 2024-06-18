@@ -19,7 +19,7 @@ class TestScheduledTasks(unittest.TestCase):
     """A test suite for the scheduled tasks."""
 
     @patch("rpidash.scheduled_tasks.logging")
-    @patch("rpidash.scheduled_tasks.get_cpu_temperature", return_value="49.00")
+    @patch("rpidash.system_utilization.SystemUtilization.get_cpu_temperature")
     @patch("rpidash.scheduled_tasks.db_session")
     def test_record_cpu_temperature_success(
             self,
@@ -31,20 +31,21 @@ class TestScheduledTasks(unittest.TestCase):
         Test record_cpu_temperature when get_cpu_temperature returns
         a valid reading.
         """
+        mock_get_cpu_temperature.return_value.cpu_temperature = 49.0
         record_cpu_temperature()
         mock_get_cpu_temperature.assert_called_once()
         mock_logging.info.assert_called_once_with(
             "Storing CPU temperature: %s °C",
-            "49.00",
+            49.0,
         )
         mock_db_session.commit.assert_called_once()
         self.assertEqual(
             mock_db_session.add.call_args[0][0].temperature,
-            "49.00",
+            49.0,
         )
 
     @patch("rpidash.scheduled_tasks.logging")
-    @patch("rpidash.scheduled_tasks.get_cpu_temperature", return_value=None)
+    @patch("rpidash.system_utilization.SystemUtilization.get_cpu_temperature")
     @patch("rpidash.scheduled_tasks.db_session")
     def test_record_cpu_temperature_no_reading(
             self,
@@ -55,6 +56,7 @@ class TestScheduledTasks(unittest.TestCase):
         """
         Test record_cpu_temperature when get_cpu_temperature returns None.
         """
+        mock_get_cpu_temperature.return_value.cpu_temperature = None
         record_cpu_temperature()
         mock_get_cpu_temperature.assert_called_once()
         mock_logging.info.assert_not_called()
@@ -62,7 +64,7 @@ class TestScheduledTasks(unittest.TestCase):
         mock_db_session.commit.assert_not_called()
 
     @patch("rpidash.scheduled_tasks.logging")
-    @patch("rpidash.scheduled_tasks.get_cpu_percentage", return_value="50.00")
+    @patch("rpidash.system_utilization.SystemUtilization.get_cpu_percentage")
     @patch("rpidash.scheduled_tasks.db_session")
     def test_record_cpu_percentage_success(
             self,
@@ -74,20 +76,21 @@ class TestScheduledTasks(unittest.TestCase):
         Test record_cpu_percentage when get_cpu_percentage returns
         a valid reading.
         """
+        mock_get_cpu_percentage.return_value.cpu_percentage = 50.0
         record_cpu_percentage()
         mock_get_cpu_percentage.assert_called_once()
         mock_logging.info.assert_called_once_with(
             "Storing CPU utilization: %s%%",
-            "50.00",
+            50.0,
         )
         mock_db_session.commit.assert_called_once()
         self.assertEqual(
             mock_db_session.add.call_args[0][0].percentage,
-            "50.00",
+            50.0,
         )
 
     @patch("rpidash.scheduled_tasks.logging")
-    @patch("rpidash.scheduled_tasks.get_cpu_percentage", return_value=None)
+    @patch("rpidash.system_utilization.SystemUtilization.get_cpu_percentage")
     @patch("rpidash.scheduled_tasks.db_session")
     def test_record_cpu_percentage_no_reading(
             self,
@@ -96,6 +99,7 @@ class TestScheduledTasks(unittest.TestCase):
             mock_logging,
     ):
         """Test record_cpu_percentage when get_cpu_percentage returns None."""
+        mock_get_cpu_percentage.return_value.cpu_percentage = None
         record_cpu_percentage()
         mock_get_cpu_percentage.assert_called_once()
         mock_logging.info.assert_not_called()
@@ -104,8 +108,7 @@ class TestScheduledTasks(unittest.TestCase):
 
     @patch("rpidash.scheduled_tasks.logging")
     @patch(
-        "rpidash.scheduled_tasks.get_memory_utilization",
-        return_value=("51.00", None, None),
+        "rpidash.system_utilization.SystemUtilization.get_memory_utilization"
     )
     @patch("rpidash.scheduled_tasks.db_session")
     def test_record_memory_utilization(
@@ -115,16 +118,17 @@ class TestScheduledTasks(unittest.TestCase):
             mock_logging,
     ):
         """Test record_memory_utilization function."""
+        mock_get_memory_utilization.return_value.memory_percentage = 51.0
         record_memory_utilization()
         mock_get_memory_utilization.assert_called_once()
         mock_logging.info.assert_called_once_with(
             "Storing memory utilization: %s%%",
-            "51.00",
+            51.0,
         )
         mock_db_session.commit.assert_called_once()
         self.assertEqual(
             mock_db_session.add.call_args[0][0].percentage,
-            "51.00",
+            51.0,
         )
 
     @patch("rpidash.scheduled_tasks.inspect", new_callable=MagicMock)

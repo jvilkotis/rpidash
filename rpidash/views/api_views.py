@@ -10,12 +10,7 @@ from flask.views import View
 
 # FIRST PARTY
 from rpidash import models
-from rpidash.utils import (
-    get_cpu_percentage,
-    get_cpu_temperature,
-    get_memory_utilization,
-    get_storage_utilization,
-)
+from rpidash.system_utilization import SystemUtilization
 
 
 class UtilizationBase(ABC, View):
@@ -41,22 +36,7 @@ class CurrentUtilization(UtilizationBase):
 
     def prepare_response(self, **kwargs) -> dict:
         """Prepare current system utilization JSON response."""
-        memory_percentage, memory_used, memory_total = get_memory_utilization()
-        storage_percentage, storage_used, storage_total = \
-            get_storage_utilization()
-        cpu_percentage = get_cpu_percentage()
-        cpu_temperature = get_cpu_temperature()
-        response = {
-            "cpu_temperature": cpu_temperature if cpu_temperature else "0.00",
-            "cpu_percentage": cpu_percentage if cpu_percentage else "0.00",
-            "memory_percentage": memory_percentage,
-            "memory_used": memory_used,
-            "memory_total": memory_total,
-            "storage_percentage": storage_percentage,
-            "storage_used": storage_used,
-            "storage_total": storage_total,
-        }
-        return response
+        return SystemUtilization().all().to_dict()
 
 
 class UtilizationHistory(UtilizationBase):
@@ -82,9 +62,8 @@ class UtilizationHistory(UtilizationBase):
         else:
             value_key = "percentage"
         for item in data:
-            data_dict = item.__dict__
-            values.append(data_dict[value_key])
-            dates.append(data_dict["date"])
+            values.append(getattr(item, value_key))
+            dates.append(item.date)
         return {"values": values, "dates": dates}
 
     def get_data(self, table_name: str) -> Any:

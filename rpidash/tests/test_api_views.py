@@ -44,36 +44,27 @@ class TestUtilizationBase(unittest.TestCase):
 class TestCurrentUtilization(unittest.TestCase):
     """A test suite for the CurrentUtilization class."""
 
-    @patch("rpidash.views.api_views.get_memory_utilization")
-    @patch("rpidash.views.api_views.get_storage_utilization")
-    @patch("rpidash.views.api_views.get_cpu_percentage")
-    @patch("rpidash.views.api_views.get_cpu_temperature")
+    @patch("rpidash.system_utilization.SystemUtilization.all")
     def test_prepare_response(
             self,
-            mock_get_cpu_temp,
-            mock_get_cpu_percent,
-            mock_get_storage,
-            mock_get_memory
+            mock_system_utilization,
     ):
         """Test prepare_response method."""
-        mock_get_memory.return_value = ("50", "512", "1024")
-        mock_get_storage.return_value = ("30", "1024", "2048")
-        mock_get_cpu_percent.return_value = "60"
-        mock_get_cpu_temp.return_value = "65.5"
+        mock_system_utilization.return_value = MagicMock()
+        mock_system_utilization.return_value.to_dict.return_value = {
+            "test_metric1": 50.0,
+            "test_metric2": 49.9,
+        }
         utilization = CurrentUtilization()
         response = utilization.prepare_response()
         expected_response = {
-            "cpu_temperature": "65.5",
-            "cpu_percentage": "60",
-            "memory_percentage": "50",
-            "memory_used": "512",
-            "memory_total": "1024",
-            "storage_percentage": "30",
-            "storage_used": "1024",
-            "storage_total": "2048",
+            "test_metric1": 50.0,
+            "test_metric2": 49.9,
         }
 
         self.assertEqual(response, expected_response)
+        mock_system_utilization.assert_called_once()
+        mock_system_utilization.return_value.to_dict.assert_called_once()
 
 
 class TestUtilizationHistory(unittest.TestCase):
@@ -96,19 +87,35 @@ class TestUtilizationHistory(unittest.TestCase):
         with self.assertRaises(ValueError):
             UtilizationHistory.get_model("non_existent_table")
 
-    def test_retrieve_data(self):
-        """Test retrieve_data method."""
+    def test_retrieve_data_temperature(self):
+        """Test retrieve_data method with temperature value key."""
         mock_model = MagicMock()
+        mock_model.__tablename__ = "cpu_temperature"
         item_dict = {
             "id": 1,
-            "attribute": "test",
+            "temperature": "99",
+            "date": "1970-01-01",
             "_sa_instance_state": "something",
         }
         item = type("Item", (), item_dict)()
-        item.__dict__ = item_dict
         mock_model.query.all.return_value = [item]
         result = UtilizationHistory.retrieve_data(mock_model)
-        self.assertEqual(result, [{"id": 1, "attribute": "test"}])
+        self.assertEqual(result, {"values": ["99"], "dates": ["1970-01-01"]})
+
+    def test_retrieve_data_percentage(self):
+        """Test retrieve_data method with percentage value key."""
+        mock_model = MagicMock()
+        mock_model.__tablename__ = "cpu_percentage"
+        item_dict = {
+            "id": 1,
+            "percentage": "99",
+            "date": "1970-01-01",
+            "_sa_instance_state": "something",
+        }
+        item = type("Item", (), item_dict)()
+        mock_model.query.all.return_value = [item]
+        result = UtilizationHistory.retrieve_data(mock_model)
+        self.assertEqual(result, {"values": ["99"], "dates": ["1970-01-01"]})
 
     @patch("rpidash.views.api_views.UtilizationHistory.get_model")
     @patch("rpidash.views.api_views.UtilizationHistory.retrieve_data")

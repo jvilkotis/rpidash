@@ -10,12 +10,8 @@ from flask_apscheduler import APScheduler
 from rpidash import models
 from rpidash.database import db_session
 from rpidash.models import CPUTemperature, CPUUtilization, MemoryUtilization
-from rpidash.utils import (
-    get_cpu_percentage,
-    get_cpu_temperature,
-    get_memory_utilization,
-    load_app_config,
-)
+from rpidash.system_utilization import SystemUtilization
+from rpidash.utils import load_app_config
 
 logging.getLogger("apscheduler").setLevel(logging.WARNING)
 
@@ -32,7 +28,7 @@ intervals = config["scheduled_tasks"]["intervals"]
 )
 def record_cpu_temperature():
     """Get CPU temperature and store it in the DB."""
-    reading = get_cpu_temperature()
+    reading = SystemUtilization().get_cpu_temperature().cpu_temperature
     if reading:
         logging.info("Storing CPU temperature: %s °C", reading)
         cpu_temperature = CPUTemperature(temperature=reading)
@@ -47,7 +43,7 @@ def record_cpu_temperature():
 )
 def record_cpu_percentage():
     """Get CPU utilization percentage and store it in the DB."""
-    reading = get_cpu_percentage()
+    reading = SystemUtilization().get_cpu_percentage().cpu_percentage
     if reading:
         logging.info("Storing CPU utilization: %s%%", reading)
         cpu_utilization = CPUUtilization(percentage=reading)
@@ -62,7 +58,7 @@ def record_cpu_percentage():
 )
 def record_memory_utilization():
     """Get memory utilization percentage and store it in the DB."""
-    reading, _, _ = get_memory_utilization()
+    reading = SystemUtilization().get_memory_utilization().memory_percentage
     logging.info("Storing memory utilization: %s%%", reading)
     memory_utilization = MemoryUtilization(percentage=reading)
     db_session.add(memory_utilization)
