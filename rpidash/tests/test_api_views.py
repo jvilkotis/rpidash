@@ -46,8 +46,8 @@ class TestCurrentUtilization(unittest.TestCase):
 
     @patch("rpidash.system_utilization.SystemUtilization.all")
     def test_prepare_response(
-            self,
-            mock_system_utilization,
+        self,
+        mock_system_utilization,
     ):
         """Test prepare_response method."""
         mock_system_utilization.return_value = MagicMock()

@@ -22,10 +22,10 @@ class TestScheduledTasks(unittest.TestCase):
     @patch("rpidash.system_utilization.SystemUtilization.get_cpu_temperature")
     @patch("rpidash.scheduled_tasks.db_session")
     def test_record_cpu_temperature_success(
-            self,
-            mock_db_session,
-            mock_get_cpu_temperature,
-            mock_logging,
+        self,
+        mock_db_session,
+        mock_get_cpu_temperature,
+        mock_logging,
     ):
         """
         Test record_cpu_temperature when get_cpu_temperature returns
@@ -48,10 +48,10 @@ class TestScheduledTasks(unittest.TestCase):
     @patch("rpidash.system_utilization.SystemUtilization.get_cpu_temperature")
     @patch("rpidash.scheduled_tasks.db_session")
     def test_record_cpu_temperature_no_reading(
-            self,
-            mock_db_session,
-            mock_get_cpu_temperature,
-            mock_logging,
+        self,
+        mock_db_session,
+        mock_get_cpu_temperature,
+        mock_logging,
     ):
         """
         Test record_cpu_temperature when get_cpu_temperature returns None.
@@ -67,10 +67,10 @@ class TestScheduledTasks(unittest.TestCase):
     @patch("rpidash.system_utilization.SystemUtilization.get_cpu_percentage")
     @patch("rpidash.scheduled_tasks.db_session")
     def test_record_cpu_percentage_success(
-            self,
-            mock_db_session,
-            mock_get_cpu_percentage,
-            mock_logging,
+        self,
+        mock_db_session,
+        mock_get_cpu_percentage,
+        mock_logging,
     ):
         """
         Test record_cpu_percentage when get_cpu_percentage returns
@@ -93,10 +93,10 @@ class TestScheduledTasks(unittest.TestCase):
     @patch("rpidash.system_utilization.SystemUtilization.get_cpu_percentage")
     @patch("rpidash.scheduled_tasks.db_session")
     def test_record_cpu_percentage_no_reading(
-            self,
-            mock_db_session,
-            mock_get_cpu_percentage,
-            mock_logging,
+        self,
+        mock_db_session,
+        mock_get_cpu_percentage,
+        mock_logging,
     ):
         """Test record_cpu_percentage when get_cpu_percentage returns None."""
         mock_get_cpu_percentage.return_value.cpu_percentage = None
@@ -112,10 +112,10 @@ class TestScheduledTasks(unittest.TestCase):
     )
     @patch("rpidash.scheduled_tasks.db_session")
     def test_record_memory_utilization(
-            self,
-            mock_db_session,
-            mock_get_memory_utilization,
-            mock_logging,
+        self,
+        mock_db_session,
+        mock_get_memory_utilization,
+        mock_logging,
     ):
         """Test record_memory_utilization function."""
         mock_get_memory_utilization.return_value.memory_percentage = 51.0
@@ -136,11 +136,11 @@ class TestScheduledTasks(unittest.TestCase):
     @patch("rpidash.scheduled_tasks.db_session")
     @patch("rpidash.scheduled_tasks.config")
     def test_delete_old_records(
-            self,
-            mock_config,
-            mock_db_session,
-            mock_models,
-            mock_inspect,
+        self,
+        mock_config,
+        mock_db_session,
+        mock_models,
+        mock_inspect,
     ):
         """Test delete_old_records function."""
         config = {
@@ -186,9 +186,9 @@ class TestScheduledTasks(unittest.TestCase):
     @patch("rpidash.scheduled_tasks.db_session")
     @patch("rpidash.scheduled_tasks.config")
     def test_delete_old_records_not_run(
-            self,
-            mock_config,
-            mock_db_session,
+        self,
+        mock_config,
+        mock_db_session,
     ):
         """Test delete_old_records function is not run."""
         config = {

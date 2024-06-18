@@ -14,9 +14,9 @@ class TestUtils(unittest.TestCase):
     @patch("yaml.safe_load")
     @patch("builtins.open")
     def test_load_app_config_production(
-            self,
-            mock_open_file,
-            mock_yaml_load,
+        self,
+        mock_open_file,
+        mock_yaml_load,
     ):  # pylint: disable=unused-argument
         """Test load_app_config in production environment."""
         load_app_config()
@@ -31,10 +31,10 @@ class TestUtils(unittest.TestCase):
     @patch("yaml.safe_load", return_value={"key": "value"})
     @patch("builtins.open", new_callable=mock_open)
     def test_load_app_config_development(
-            self,
-            mock_open_file,
-            mock_yaml_load,
-            mock_os_path,
+        self,
+        mock_open_file,
+        mock_yaml_load,
+        mock_os_path,
     ):  # pylint: disable=unused-argument
         """Test load_app_config in development environment."""
         mock_os_path.dirname.return_value = "/path/to/package"
@@ -51,10 +51,10 @@ class TestUtils(unittest.TestCase):
     @patch("yaml.safe_load", return_value={"key": "value"})
     @patch("builtins.open", new_callable=mock_open)
     def test_load_app_config_testing(
-            self,
-            mock_open_file,
-            mock_yaml_load,
-            mock_os_path,
+        self,
+        mock_open_file,
+        mock_yaml_load,
+        mock_os_path,
     ):  # pylint: disable=unused-argument
         """Test load_app_config in testing environment."""
         mock_os_path.dirname.return_value = "/path/to/package"
@@ -77,10 +77,10 @@ class TestUtils(unittest.TestCase):
     @patch("toml.load", return_value={"project": {"version": "1.0"}})
     @patch("builtins.open", new_callable=mock_open)
     def test_get_project_version(
-            self,
-            mock_open_file,
-            mock_toml_load,
-            mock_os_path,
+        self,
+        mock_open_file,
+        mock_toml_load,
+        mock_os_path,
     ):  # pylint: disable=unused-argument
         """Test get_project_version."""
         mock_os_path.dirname.return_value = "/path/to/project/root"
