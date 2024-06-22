@@ -9,4 +9,4 @@ else
     echo "Config file already exists. Skipping copy operation."
 fi
 
-exec gunicorn -w 1 -b 0.0.0.0:5000 "rpidash:create_app()"
+exec gunicorn -w 2 -b 0.0.0.0:5000 "rpidash:create_app()"
