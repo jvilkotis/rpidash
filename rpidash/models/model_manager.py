@@ -65,7 +65,7 @@ class ModelManager:
                     "The 'recorded_after' parameter must be in the format"
                     " 'YYYY-MM-DDTHH:MM:SS'"
                 ) from exc
-        data = query.all()
+        data = query.limit(10000).all()
 
         values = []
         dates = []
