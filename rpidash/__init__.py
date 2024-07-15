@@ -7,8 +7,8 @@ from flask import Flask
 # FIRST PARTY
 from rpidash import database as db
 from rpidash import models
-from rpidash.scheduled_tasks import scheduler
-from rpidash.utils import load_app_config
+from rpidash.services.task_scheduler import TaskScheduler
+from rpidash.utils.utils import load_app_config
 from rpidash.views.api_views import CurrentUtilization, UtilizationHistory
 from rpidash.views.dashboard import Dashboard
 
@@ -39,7 +39,8 @@ def create_app() -> Flask:
     )
 
     if config["scheduled_tasks"]["enabled"]:  # pragma: no cover
-        scheduler.init_app(app)
+        scheduler = TaskScheduler()
+        scheduler.scheduler.init_app(app)
         scheduler.start()
 
     db.init_db(database_uri=config["database"]["uri"])

@@ -3,13 +3,13 @@ import unittest
 from unittest.mock import MagicMock, patch
 
 # FIRST PARTY
-from rpidash.system_utilization import SystemUtilization
+from rpidash.services.system_utilization import SystemUtilization
 
 
 class TestSystemUtilization(unittest.TestCase):
     """A test suite for the system utilization metric class."""
 
-    @patch("rpidash.system_utilization.psutil")
+    @patch("rpidash.services.system_utilization.psutil")
     def test_get_cpu_temperature(self, mock_psutil):
         """Test get_cpu_temperature with valid coretemp return value."""
         mock_psutil.sensors_temperatures.return_value = {
@@ -18,7 +18,7 @@ class TestSystemUtilization(unittest.TestCase):
         system_util = SystemUtilization().get_cpu_temperature()
         self.assertEqual(system_util.cpu_temperature, 55.0)
 
-    @patch("rpidash.system_utilization.psutil")
+    @patch("rpidash.services.system_utilization.psutil")
     def test_get_cpu_temperature_valid_cpu_thermal(self, mock_psutil):
         """Test get_cpu_temperature with valid cpu_thermal return value."""
         mock_psutil.sensors_temperatures.return_value = {
@@ -27,14 +27,14 @@ class TestSystemUtilization(unittest.TestCase):
         system_util = SystemUtilization().get_cpu_temperature()
         self.assertEqual(system_util.cpu_temperature, 60.0)
 
-    @patch("rpidash.system_utilization.psutil")
+    @patch("rpidash.services.system_utilization.psutil")
     def test_get_cpu_temperature_no_cores(self, mock_psutil):
         """Test get_cpu_temperature with missing sensor data."""
         mock_psutil.sensors_temperatures.return_value = {}
         system_util = SystemUtilization().get_cpu_temperature()
         self.assertEqual(system_util.cpu_temperature, 0.0)
 
-    @patch("rpidash.system_utilization.psutil")
+    @patch("rpidash.services.system_utilization.psutil")
     def test_get_cpu_temperature_no_attribute(self, mock_psutil):
         """Test get_cpu_temperature with no sensors_temperatures attribute."""
         mock_psutil.sensors_temperatures.side_effect = AttributeError
@@ -69,15 +69,24 @@ class TestSystemUtilization(unittest.TestCase):
         self.assertEqual(system_util.storage_used, 0.5)
         self.assertEqual(system_util.storage_total, 1.0)
 
-    @patch("rpidash.system_utilization.SystemUtilization.get_cpu_temperature")
-    @patch("rpidash.system_utilization.SystemUtilization.get_cpu_percentage")
     @patch(
-        "rpidash.system_utilization.SystemUtilization.get_memory_utilization"
+        "rpidash.services.system_utilization"
+        ".SystemUtilization.get_cpu_temperature"
     )
     @patch(
-        "rpidash.system_utilization.SystemUtilization.get_storage_utilization"
+        "rpidash.services.system_utilization"
+        ".SystemUtilization.get_cpu_percentage"
     )
-    def test_all_methods_called(self,
+    @patch(
+        "rpidash.services.system_utilization"
+        ".SystemUtilization.get_memory_utilization"
+    )
+    @patch(
+        "rpidash.services.system_utilization"
+        ".SystemUtilization.get_storage_utilization"
+    )
+    def test_all_methods_called(
+        self,
         mock_get_storage_utilization,
         mock_get_memory_utilization,
         mock_get_cpu_percentage,

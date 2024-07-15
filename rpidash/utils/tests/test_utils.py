@@ -4,7 +4,7 @@ import unittest
 from unittest.mock import mock_open, patch
 
 # FIRST PARTY
-from rpidash.utils import get_project_version, load_app_config
+from rpidash.utils.utils import get_project_version, load_app_config
 
 
 class TestUtils(unittest.TestCase):

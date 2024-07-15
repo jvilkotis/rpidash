@@ -5,7 +5,11 @@ from datetime import datetime
 # FIRST PARTY
 from rpidash import create_app
 from rpidash.database import db_session
-from rpidash.models import CPUTemperature, CPUUtilization, MemoryUtilization
+from rpidash.models.models import (
+    CPUTemperature,
+    CPUUtilization,
+    MemoryUtilization,
+)
 
 
 class TestModels(unittest.TestCase):
@@ -19,7 +23,7 @@ class TestModels(unittest.TestCase):
         cls.context.push()
 
     def tearDown(self):
-        """Rollback uncomitted changes after each test if any."""
+        """Rollback uncommitted changes after each test if any."""
         db_session.rollback()
 
     @classmethod

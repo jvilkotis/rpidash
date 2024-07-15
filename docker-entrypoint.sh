@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SOURCE_CONFIG="/rpidash/rpidash/config.prod.yaml"
+SOURCE_CONFIG="/rpidash/config.prod.yaml"
 DEST_CONFIG="/data/config.yaml"
 
 if [ ! -f "$DEST_CONFIG" ]; then

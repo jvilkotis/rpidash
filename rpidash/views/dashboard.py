@@ -4,7 +4,7 @@ from flask.typing import ResponseReturnValue
 from flask.views import View
 
 # FIRST PARTY
-from rpidash.utils import get_project_version
+from rpidash.utils.utils import get_project_version
 
 
 class Dashboard(View):

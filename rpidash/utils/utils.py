@@ -9,7 +9,13 @@ import yaml
 def load_app_config() -> dict:
     """Load app configuration from YAML file."""
     environment = os.environ["FLASK_ENV"]
-    dir_path = os.path.dirname(os.path.abspath(__file__))
+    dir_path = os.path.dirname(
+        os.path.dirname(
+            os.path.dirname(
+                os.path.abspath(__file__)
+            )
+        )
+    )
     if environment == "production":
         config_path = "/data/config.yaml"
     elif environment == "development":
@@ -25,7 +31,13 @@ def load_app_config() -> dict:
 
 def get_project_version() -> str:
     """Get project version from pyproject.toml."""
-    dir_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    dir_path = os.path.dirname(
+        os.path.dirname(
+            os.path.dirname(
+                os.path.abspath(__file__)
+            )
+        )
+    )
     pyproject_path = os.path.join(dir_path, "pyproject.toml")
     with open(pyproject_path, "r", encoding="utf-8") as file:
         pyproject = toml.load(file)

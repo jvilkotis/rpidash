@@ -8,7 +8,7 @@ from sqlalchemy import Column, DateTime, Integer, String
 from rpidash.database import Base
 
 
-class CPUTemperature(Base):  # pylint: disable=too-few-public-methods
+class CPUTemperature(Base):
     """CPU temperature model."""
     __tablename__ = "cpu_temperature"
     id = Column(Integer, primary_key=True)
@@ -19,8 +19,13 @@ class CPUTemperature(Base):  # pylint: disable=too-few-public-methods
         self.temperature = temperature
         self.date = datetime.now()
 
+    @staticmethod
+    def get_value_key() -> str:
+        """Return the key name for temperature value."""
+        return "temperature"
 
-class CPUUtilization(Base):  # pylint: disable=too-few-public-methods
+
+class CPUUtilization(Base):
     """CPU utilization model."""
     __tablename__ = "cpu_utilization"
     id = Column(Integer, primary_key=True)
@@ -31,8 +36,13 @@ class CPUUtilization(Base):  # pylint: disable=too-few-public-methods
         self.percentage = percentage
         self.date = datetime.now()
 
+    @staticmethod
+    def get_value_key() -> str:
+        """Return the key name for utilization percentage."""
+        return "percentage"
 
-class MemoryUtilization(Base):  # pylint: disable=too-few-public-methods
+
+class MemoryUtilization(Base):
     """Memory utilization model."""
     __tablename__ = "memory_utilization"
     id = Column(Integer, primary_key=True)
@@ -42,3 +52,8 @@ class MemoryUtilization(Base):  # pylint: disable=too-few-public-methods
     def __init__(self, percentage=None):
         self.percentage = percentage
         self.date = datetime.now()
+
+    @staticmethod
+    def get_value_key() -> str:
+        """Return the key name for utilization percentage."""
+        return "percentage"

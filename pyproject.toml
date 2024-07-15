@@ -10,7 +10,11 @@ requires = ["flit_core<4"]
 build-backend = "flit_core.buildapi"
 
 [tool.pylint."MESSAGES CONTROL"]
-disable = "missing-module-docstring"
+disable = [
+    "missing-module-docstring",
+    "too-many-instance-attributes",
+    "too-few-public-methods",
+]
 max-line-length = 79
 check-quote-consistency = true
 

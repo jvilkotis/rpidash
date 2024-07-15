@@ -8,8 +8,6 @@ import psutil
 class SystemUtilization:
     """A class to represent the system utilization metrics."""
 
-    # pylint: disable=too-many-instance-attributes
-
     def __init__(self):
         self.cpu_temperature = 0.0
         self.cpu_percentage = 0.0
@@ -51,7 +49,7 @@ class SystemUtilization:
             self.cpu_temperature = round(sum(core_temps) / len(core_temps), 2)
         except (AttributeError, ZeroDivisionError) as exc:
             logging.warning(
-                "Couldn't get CPU temperate: %s",
+                "Couldn't get CPU temperature: %s",
                 exc,
             )
         return self
