@@ -1,6 +1,11 @@
 const fetchDataAndUpdateGraph = async (graph) => {
   try {
-    const response = await fetch(graph.endpoint);
+    let endpoint = graph.endpoint;
+    if (graph.latestDate) {
+      endpoint += `?recorded_after=${graph.latestDate}`;
+    }
+
+    const response = await fetch(endpoint);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
@@ -8,44 +13,41 @@ const fetchDataAndUpdateGraph = async (graph) => {
 
     const dates = data.dates.map(date => new Date(date));
     const values = data.values;
-    const chartData = [{
-      x: dates,
-      y: values,
-      mode: "lines",
-      type: "scatter",
-      line: { color: "#B80C09" }
-    }];
 
-    const maxDate = new Date(Math.max(...dates));
-    const minDate = new Date(Math.min(...dates));
+    if (dates.length > 0) {
+      graph.dates.push(...dates)
+      graph.values.push(...values)
 
-    const fiveDaysAgo = new Date(maxDate.getTime() - 5 * 24 * 60 * 60 * 1000);
+      const chartData = [{
+        x: graph.dates,
+        y: graph.values,
+        mode: "lines",
+        type: "scatter",
+        line: { color: "#B80C09" }
+      }];
 
-    const rangeStart = new Date(Math.max(fiveDaysAgo, minDate));
-    const rangeEnd = maxDate;
+      const layout = {
+        xaxis: { zeroline: false },
+        yaxis: { zeroline: false },
+        dragmode: "pan",
+        margin: { t: 20 },
+        font: { family: "'Prompt', sans-serif" }
+      };
 
-    const layout = {
-      xaxis: {
-        zeroline: false,
-        range: [rangeStart, rangeEnd]
-      },
-      yaxis: { zeroline: false },
-      dragmode: "pan",
-      margin: { t: 20 },
-      font: { family: "'Prompt', sans-serif" }
-    };
+      const config = {
+        scrollZoom: true,
+        displayModeBar: false
+      };
 
-    const config = {
-      scrollZoom: true,
-      displayModeBar: false
-    };
+      if (!graph.latestDate) {
+        Plotly.newPlot(graph.id, chartData, layout, config);
+        graph.initializedFlag = true;
+      } else {
+        const updatedData = { x: [graph.dates], y: [graph.values] };
+        Plotly.update(graph.id, updatedData);
+      }
 
-    if (!graph.initializedFlag) {
-      Plotly.newPlot(graph.id, chartData, layout, config);
-      graph.initializedFlag = true;
-    } else {
-      const updatedData = { x: [dates], y: [values] };
-      Plotly.update(graph.id, updatedData, layout);
+      graph.latestDate = data.dates[data.dates.length - 1];
     }
   } catch (error) {
     console.error("There was a problem fetching the data:", error);
@@ -64,19 +66,25 @@ const graphs = [
     endpoint: "/services/cpu_utilization",
     id: "cpu-utilization",
     valueKey: "percentage",
-    initializedFlag: false
+    dates: [],
+    values: [],
+    latestDate: null
   },
   {
     endpoint: "/services/cpu_temperature",
     id: "cpu-temperature",
     valueKey: "temperature",
-    initializedFlag: false
+    dates: [],
+    values: [],
+    latestDate: null
   },
   {
     endpoint: "/services/memory_utilization",
     id: "memory-utilization",
     valueKey: "percentage",
-    initializedFlag: false
+    dates: [],
+    values: [],
+    latestDate: null
   }
 ];
 

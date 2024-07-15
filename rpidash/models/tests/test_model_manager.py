@@ -102,6 +102,19 @@ class TestModelManager(unittest.TestCase):
 
     @patch("rpidash.models.model_manager.db_session")
     @patch("rpidash.models.model_manager.ModelManager.get_models")
+    def test_store_record(self, mock_get_models, mock_db_session):
+        """Test store_record method."""
+        mock_get_models.return_value = self.models
+        manager = ModelManager("cpu_temperature")
+
+        manager.store_record(50)
+        instance = manager.model()
+        setattr(instance, "temperature", 50)
+        mock_db_session.add.assert_called_with(instance)
+        mock_db_session.commit.assert_called_once()
+
+    @patch("rpidash.models.model_manager.db_session")
+    @patch("rpidash.models.model_manager.ModelManager.get_models")
     def test_delete_records(self, mock_get_models, mock_db_session):
         """Test delete_records method."""
         mock_get_models.return_value = self.models

@@ -58,6 +58,7 @@ class ModelManager:
                     recorded_after,
                     "%Y-%m-%dT%H:%M:%S",
                 )
+                recorded_after_dt += timedelta(seconds=1)
                 query = query.filter(self.model.date > recorded_after_dt)
             except ValueError as exc:
                 raise ValueError(
